@@ -21,7 +21,9 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="www.silver.hom" />
+	<context:component-scan base-package="review.codemaster.reviewmaster" />
+	<context:component-scan base-package="review.codemaster.dao" />
+	<context:component-scan base-package="review.codemaster.service" />
 	
 	
 	

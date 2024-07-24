@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mtbatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="review.codemaster.dao.IF_ReviewDAO"> <!-- 인터페이스 -->
+	<insert id="insert"
+		parameterType="review.codemaster.vo.ReviewVO"> <!-- id: 쿼리명, parameterType: DB와 주고받을 파라미터 형식 경로 -->
+		insert into shop_review values (review_cnt.nextval, #{shop_name},
+		#{region}, #{review}, default, #{star_point}, #{user_name}, #{pw}) <!-- #: 파라미터의 
+			get으로 부터 가져옴 -->
+		<!-- parameter type의 객체의 getter -->
+	</insert>
+	<select id="select" parameterType="review.codemaster.vo.PageVO" resultType="review.codemaster.vo.ReviewVO">
+		select t.* from (select sub.*, rownum as rnum from (select * from
+		shop_review where shop_name like '%'||#{searchKeyword}||'%' or region like '%'||#{searchKeyword}||'%' or review like '%'||#{searchKeyword}||'%' or star_point like '%'||#{searchKeyword}||'%' order by no DESC) sub) t
+		where rnum between #{startNo} and #{endNo}
+	</select>
+	<delete id="delete" parameterType="String">
+		delete from shop_review where no = #{delno}
+	</delete>
+	<update id="update" parameterType="review.codemaster.vo.ReviewVO">
+		update shop_review set shop_name = #{shop_name}, region = #{region}, review = #{review}, star_point = #{star_point}, user_name = #{user_name} where no = #{no}
+	</update>
+	<select id="modselect" parameterType="String" resultType="review.codemaster.vo.ReviewVO">
+		select * from shop_review where no = #{modno}
+	</select>
+	<insert id="insertcmt"
+		parameterType="review.codemaster.vo.CommentVO"> <!-- id: 쿼리명, parameterType: DB와 주고받을 파라미터 형식 경로 -->
+		insert into comments values (#{review_no}, #{cmt}) <!-- #: 파라미터의 
+			get으로 부터 가져옴 -->
+		<!-- parameter type의 객체의 getter -->
+	</insert>
+	<select id="selectcmt" resultType="review.codemaster.vo.CommentVO">
+		select * from comments
+	</select>
+	<select id="getTotalCount" parameterType="String" resultType="int">
+		select count(*) from shop_review where shop_name like '%'||#{searchKeyword}||'%' or region like '%'||#{searchKeyword}||'%' or review like '%'||#{searchKeyword}||'%' or star_point like '%'||#{searchKeyword}||'%'
+	</select>
+</mapper>
